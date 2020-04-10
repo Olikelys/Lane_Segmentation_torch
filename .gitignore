@@ -8,6 +8,6 @@ _res/
 *.pdf
 *.zip
 *.tgz
-*.md
-!README.md
-/model_weights/
+*.csv
+*.npy
+*.h5
