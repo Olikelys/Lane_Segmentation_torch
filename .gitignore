@@ -10,4 +10,4 @@ _res/
 *.tgz
 *.md
 !README.md
-/weights/
+/model_weights/
