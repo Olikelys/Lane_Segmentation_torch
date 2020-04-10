@@ -1,0 +1,13 @@
+.idea
+__pycache__
+.ipynb_checkpoints/
+.vscode/
+_res/
+*.swp
+*.ipynb
+*.pdf
+*.zip
+*.tgz
+*.md
+!README.md
+/weights/
