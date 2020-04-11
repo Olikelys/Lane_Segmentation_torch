@@ -4,7 +4,7 @@
 @Author: Bikang Peng
 @Date: 2020-04-11 21:39:15
 @LastEditors: Bikang Peng
-@LastEditTime: 2020-04-11 23:01:54
+@LastEditTime: 2020-04-11 23:05:36
 '''
 
 import os
@@ -68,6 +68,6 @@ train_dataset = all_shuffle[:sixth_part]
 val_dataset = all_shuffle[sixth_part:eighth_part]
 test_dataset = all_shuffle[eighth_part:]
 
-train_dataset.to_csv('/home/kang/CV-Project/Lane_Segmentation_torch/data_list/train.csv')
-val_dataset.to_csv('/home/kang/CV-Project/Lane_Segmentation_torch/data_list/val.csv')
-test_dataset.to_csv('/home/kang/CV-Project/Lane_Segmentation_torch/data_list/test.csv')
+train_dataset.to_csv('/home/kang/CV-Project/Lane_Segmentation_torch/data_list/train.csv',index=False)
+val_dataset.to_csv('/home/kang/CV-Project/Lane_Segmentation_torch/data_list/val.csv', index=False)
+test_dataset.to_csv('/home/kang/CV-Project/Lane_Segmentation_torch/data_list/test.csv', index=False)
