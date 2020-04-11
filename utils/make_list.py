@@ -4,7 +4,7 @@
 @Author: Bikang Peng
 @Date: 2020-04-11 21:39:15
 @LastEditors: Bikang Peng
-@LastEditTime: 2020-04-11 23:00:38
+@LastEditTime: 2020-04-11 23:01:54
 '''
 
 import os
@@ -24,7 +24,7 @@ for s1 in os.listdir(image_dir):
     # ColorImage/Road02
     image_sub_dir1 = os.path.join(image_dir, s1)
     # Gray_Label/Lable_road02/Lable
-    label_sub_dir1 = os.path.join(label_dir, 'Label_' + str.lower(s1), 'Lable')
+    label_sub_dir1 = os.path.join(label_dir, 'Label_' + str.lower(s1), 'Label')
 
     # Road02
     for s2 in os.listdir(image_sub_dir1):
