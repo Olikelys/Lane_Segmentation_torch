@@ -1,21 +1,23 @@
-'''
-@Descripttion: 把图片映射成CSV文件
-@version: 
-@Author: Bikang Peng
-@Date: 2020-04-11 21:39:15
-@LastEditors: Bikang Peng
-@LastEditTime: 2020-04-11 23:05:36
-'''
+#!usr/bin/python
+# -*- encoding: utf-8 -*-
+"""
+@Time           : 2020/4/12 上午10:24
+@User           : kang
+@Author         : BiKang Peng
+@ProjectName    : Lane_Segmentation_torch
+@FileName       : make_list.py 
+@Software       : PyCharm   
+"""
 
 import os
 import pandas as pd
 from sklearn.utils import shuffle
 
-# 定义image_list, lable_list两个列表
+# 定义image_list, label_list两个列表
 image_list = []
 label_list = []
 
-# 定义image 和 lable 两个文件夹路径
+# 定义image 和 label 两个文件夹路径
 image_dir = '/home/kang/DATASETS/Self-driving_lane_detection/ColorImage/'
 label_dir = '/home/kang/DATASETS/Self-driving_lane_detection/Gray_Label/'
 
@@ -23,21 +25,21 @@ label_dir = '/home/kang/DATASETS/Self-driving_lane_detection/Gray_Label/'
 for s1 in os.listdir(image_dir):
     # ColorImage/Road02
     image_sub_dir1 = os.path.join(image_dir, s1)
-    # Gray_Label/Lable_road02/Lable
+    # Gray_Label/Label_road02/Label
     label_sub_dir1 = os.path.join(label_dir, 'Label_' + str.lower(s1), 'Label')
 
     # Road02
     for s2 in os.listdir(image_sub_dir1):
         # ColorImage/Road02/Record001
         image_sub_dir2 = os.path.join(image_sub_dir1, s2)
-        # Gray_Label/Lable_road02/Lable/Record001
+        # Gray_Label/Label_road02/Label/Record001
         label_sub_dir2 = os.path.join(label_sub_dir1, s2)
 
         # Record001
         for s3 in os.listdir(image_sub_dir2):
             # ColorImage/Road02/Record001/Camera5
             image_sub_dir3 = os.path.join(image_sub_dir2, s3)
-            # Gray_Label/Lable_road02/Lable/Record001/Camera5
+            # Gray_Label/Label_road02/Label/Record001/Camera5
             label_sub_dir3 = os.path.join(label_sub_dir2, s3)
 
             # 图片 image为jpg，label为png
