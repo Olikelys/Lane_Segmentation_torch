@@ -1,16 +1,23 @@
-'''
-@Descripttion: label 处理
-@version: 
-@Author: Bikang Peng
-@Date: 2020-04-11 23:12:39
-@LastEditors: Bikang Peng
-@LastEditTime: 2020-04-12 09:33:39
-'''
+#!usr/bin/python
+# -*- encoding: utf-8 -*-
+"""
+@Time           : 2020/4/12 上午10:25
+@User           : kang
+@Author         : BiKang Peng
+@ProjectName    : Lane_Segmentation_torch
+@FileName       : process_labels.py 
+@Software       : PyCharm   
+"""
 import numpy as np
 import colorsys
 
 
-def encode_label(color_mask):
+def encode_labels(color_mask):
+    """
+    编码标签
+    @param color_mask:
+    @return:
+    """
     encode_mask = np.zeros((color_mask.shape[0], color_mask.shape[1]))
     id_train = {
         0: [
@@ -32,6 +39,11 @@ def encode_label(color_mask):
 
 
 def decode_labels(labels):
+    """
+    解码标签
+    @param labels:
+    @return:
+    """
     deocde_mask = np.zeros((labels.shape[0], labels.shape[1]), dtype='uint8')
     # 0
     deocde_mask[labels == 0] = 0
@@ -54,6 +66,11 @@ def decode_labels(labels):
 
 
 def decode_color_labels(labels):
+    """
+    解码颜色标签
+    @param labels:
+    @return:
+    """
     decode_mask = np.zeros((3, labels.shape[0], labels.shape[1]),
                            dtype='uint8')
     # 0
@@ -93,7 +110,12 @@ def decode_color_labels(labels):
 
 
 def class_colors(num_classes, bright=True):
-    '''根据类的ID选择一个中心色来显示它们'''
+    """
+    根据类的ID选择一个中心色来显示它们
+    @param num_classes: 类别数
+    @param bright: 亮度
+    @return:
+    """
     # 亮度选择
     brightness = 1 if bright else 0.7
     # HSV(HSB):色相(Hue)、饱和度(Saturation)、明度(Value),又称HSB(B即Brightness)
@@ -104,7 +126,13 @@ def class_colors(num_classes, bright=True):
 
     return color_map
 
+
 def verify_labels(labels):
+    """
+    验证labels
+    @param labels:
+    @return:
+    """
     pixels = [0]
     for x in labels.shape[0]:
         for y in labels.shape[1]:
