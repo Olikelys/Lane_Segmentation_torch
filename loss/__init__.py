@@ -5,6 +5,6 @@
 @User           : kang
 @Author         : BiKang Peng
 @ProjectName    : Lane_Segmentation_torch
-@FileName       : __ini.py 
+@FileName       : __init__.py
 @Software       : PyCharm   
 """
