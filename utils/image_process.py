@@ -5,7 +5,7 @@
 @User           : kang
 @Author         : BiKang Peng
 @ProjectName    : Lane_Segmentation_torch
-@FileName       : image_precess.py 
+@FileName       : image_process.py
 @Software       : PyCharm   
 """
 
@@ -52,7 +52,7 @@ class LaneDataset(Dataset):
         @param transform:
         """
         super(LaneDataset, self).__init__()
-        self.data = pd.read_csv(csv_file, header=0, names=['image', 'label'])
+        self.data = pd.read_csv(csv_file, header=None, names=['image', 'label'])
         self.images = self.data['image'].values[1:]
         self.labels = self.data['label'].values[1:]
         self.transform = transform
