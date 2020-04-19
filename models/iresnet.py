@@ -209,11 +209,12 @@ class Bottleneck(nn.Module):
 
 
 class iResNet(nn.Module):
-    def __init__(self, block, layers, norm_layer=None):
+    def __init__(self, block, layers, zero_init_residual=True, norm_layer=None):
         """
         构建iResNet网络
         @param block:
         @param layers:
+        @param zero_init_residual:
         @param norm_layer:
         """
         super(iResNet, self).__init__()
@@ -239,6 +240,15 @@ class iResNet(nn.Module):
             elif isinstance(m, (nn.BatchNorm2d, GroupNorm, FilterResponseNorm2d)):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
+
+        if zero_init_residual:
+            for m in self.modules():
+                if isinstance(m, Bottleneck):
+                    if m.start_block or m.end_block:
+                        nn.init.constant_(m.bn3.weight, 0)
+                elif isinstance(m, BasicBlock):
+                    if m.start_block or m.end_block:
+                        nn.init.constant_(m.bn2.weight, 0)
 
     def _make_layer(self, block, planes, blocks, stride=1, norm_layer=None):
         if norm_layer is None:

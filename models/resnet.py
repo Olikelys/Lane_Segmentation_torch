@@ -53,13 +53,14 @@ class BasicBlock(nn.Module):
         @param norm_layer:
         """
         super(BasicBlock, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'nn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
         elif norm_layer is 'frn':
             norm_layer = FilterResponseNorm2d
 
+        self.use_bn = norm_layer is not None
         self.conv1 = conv3x3(inplanes, planes, stride)
         self.bn1 = norm_layer(planes)
         self.conv2 = conv3x3(planes, planes)
@@ -72,11 +73,13 @@ class BasicBlock(nn.Module):
         identify = x
 
         out = self.conv1(x)
-        out = self.bn1(out)
+        if self.use_bn:
+            out = self.bn1(out)
         out = self.relu(out)
 
         out = self.conv2(out)
-        out = self.bn2(out)
+        if self.use_bn:
+            out = self.bn2(out)
 
         if self.downsample is not None:
             identify = self.downsample(x)

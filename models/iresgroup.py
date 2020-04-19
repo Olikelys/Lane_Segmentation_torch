@@ -128,7 +128,7 @@ class ResGroupBlock(nn.Module):
 
 class iResGroup(nn.Module):
 
-    def __init__(self, block, layers, norm_layer=None, groups=None):
+    def __init__(self, block, layers, zero_init_residual=True,norm_layer=None, groups=None):
         """
         构建iResGroup网络
         @param block:
@@ -165,6 +165,12 @@ class iResGroup(nn.Module):
             elif isinstance(m, (nn.BatchNorm2d, nn.GroupNorm, FilterResponseNorm2d)):
                 nn.init.constant_(m.weight, 1)
                 nn.init.constant_(m.bias, 0)
+
+        if zero_init_residual:
+            for m in self.modules():
+                if isinstance(m, ResGroupBlock):
+                    if m.start_block or m.end_block:
+                        nn.init.constant_(m.bn3.weight, 0)
 
     def _make_layer(self, block, planes, blocks, groups, stride=1, norm_layer=None):
         if norm_layer is None:

@@ -83,5 +83,5 @@ def build_backbone(backbone='resnet-50', layers=50, output_stride=16, norm_layer
             return model
 
     elif backbone is 'xception':
-        model = Xception(output_stride=output_stride, norm_layer=norm_layer)
+        model = xception.xception(output_stride=output_stride, norm_layer=norm_layer)
         return model

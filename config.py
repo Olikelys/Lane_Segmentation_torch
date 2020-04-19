@@ -10,6 +10,7 @@
 """
 
 import os
+import torch
 
 
 class Configuration(object):
@@ -23,7 +24,7 @@ class Configuration(object):
         定义构建网络参数
         '''
         # 所使用的骨干网络：resnet, resgroup, iresnet, iresgroup, xception
-        self.BACKBONE = 'iresnet'
+        self.BACKBONE = 'resnet'
         # 所使用的骨干网路的层数：50, 101, 152, 200, 302, 404, 1001
         self.LAYERS = 50
         # 下采样倍数
