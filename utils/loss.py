@@ -158,50 +158,50 @@ class FocalLoss(nn.Module):
             loss = loss.sum()
         return loss
 
-    class TverskyLoss(nn.Module):
-        def __init__(self, apply_nonlin=softmax_helper, batch_dice=True, do_bg=True, smooth=1.,
-                     square=False):
-            super(TverskyLoss, self).__init__()
+class TverskyLoss(nn.Module):
+    def __init__(self, apply_nonlin=softmax_helper, batch_dice=True, do_bg=True, smooth=1.,
+                 square=False):
+        super(TverskyLoss, self).__init__()
 
-            self.square = square
-            self.do_bg = do_bg
-            self.batch_dice = batch_dice
-            self.apply_nonlin = apply_nonlin
-            self.smooth = smooth
-            self.alpha = 0.3
-            self.beta = 0.7
+        self.square = square
+        self.do_bg = do_bg
+        self.batch_dice = batch_dice
+        self.apply_nonlin = apply_nonlin
+        self.smooth = smooth
+        self.alpha = 0.3
+        self.beta = 0.7
 
-        def forward(self, x, y, loss_mask=None):
-            shp_x = x.shape
+    def forward(self, x, y, loss_mask=None):
+        shp_x = x.shape
 
+        if self.batch_dice:
+            axes = [0] + list(range(2, len(shp_x)))
+        else:
+            axes = list(range(2, len(shp_x)))
+
+        if self.apply_nonlin is not None:
+            x = self.apply_nonlin(x)
+
+        tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)
+
+        tversky = (tp + self.smooth) / (tp + self.alpha * fp + self.beta * fn + self.smooth)
+
+        if not self.do_bg:
             if self.batch_dice:
-                axes = [0] + list(range(2, len(shp_x)))
+                tversky = tversky[1:]
             else:
-                axes = list(range(2, len(shp_x)))
+                tversky = tversky[:, 1:]
+        tversky = tversky.mean()
 
-            if self.apply_nonlin is not None:
-                x = self.apply_nonlin(x)
+        return -tversky
 
-            tp, fp, fn = get_tp_fp_fn(x, y, axes, loss_mask, self.square)
+class FocalTversky_loss(nn.Module):
+    def __init__(self, tversky_kwargs, gamma=0.75):
+        super(FocalTversky_loss, self).__init__()
+        self.gamma = gamma
+        self.tversky = TverskyLoss(**tversky_kwargs)
 
-            tversky = (tp + self.smooth) / (tp + self.alpha * fp + self.beta * fn + self.smooth)
-
-            if not self.do_bg:
-                if self.batch_dice:
-                    tversky = tversky[1:]
-                else:
-                    tversky = tversky[:, 1:]
-            tversky = tversky.mean()
-
-            return -tversky
-
-    class FocalTversky_loss(nn.Module):
-        def __init__(self, tversky_kwargs, gamma=0.75):
-            super(FocalTversky_loss, self).__init__()
-            self.gamma = gamma
-            self.tversky = TverskyLoss(**tversky_kwargs)
-
-        def forward(self, net_output, target):
-            tversky_loss = 1 + self.tversky(net_output, target)  # = 1-tversky(net_output, target)
-            focal_tversky = torch.pow(tversky_loss, self.gamma)
-            return focal_tversky
+    def forward(self, net_output, target):
+        tversky_loss = 1 + self.tversky(net_output, target)  # = 1-tversky(net_output, target)
+        focal_tversky = torch.pow(tversky_loss, self.gamma)
+        return focal_tversky

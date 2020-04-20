@@ -5,7 +5,7 @@
 @User           : kang
 @Author         : BiKang Peng
 @ProjectName    : Lane_Segmentation_torch
-@FileName       : deeplab-v3p.py 
+@FileName       : deeplab_v3p.py
 @Software       : PyCharm   
 """
 import math

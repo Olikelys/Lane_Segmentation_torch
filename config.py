@@ -32,7 +32,7 @@ class Configuration(object):
         # 分类数
         self.NUM_CLASSES = 8
         # 选择BN
-        self.NORM_LAYER = None
+        self.NORM_LAYER = 'frn'
         # 重置bn为0
         self.FREEZE_BN = False
 
@@ -51,16 +51,20 @@ class Configuration(object):
         self.TRAIN = 'train'
         self.VAL = 'val'
         self.TEST = 'test'
+        # 定义训练所用loss函数
+        self.LOSS = 'ce'
         # 采用哪几种图像增强算法
         self.AUG = 'all'
         # 每次输入的图片数
-        self.TRAIN_BATCHES = 2
+        self.BATCHES = 2
         # 是否打乱
         self.TRAIN_SHUFFLE = True
+        self.VAL_TEST_SHUFFLE = False
         # 使用进程（并行处理）
         self.DATA_WORKERS = 4
         # 保存日志文件路径
-        self.LOG_DIR = os.path.join(self.ROOT_DIR, 'logs', self.BACKBONE + str(self.LAYERS))
+        self.LOG_DIR = os.path.join(self.ROOT_DIR, 'logs', self.BACKBONE + '_' + str(self.LAYERS),
+                                    self.NORM_LAYER + '_' + self.LOSS)
         # 使用GPU数量
         self.TRAIN_GPUS = 1
         # 与训练权重路径
@@ -73,7 +77,8 @@ class Configuration(object):
         self.TRAIN_MINEPOCH = 0
         self.TRAIN_EPOCHS = 100
         # 权重保存路径
-        self.MODEL_SAVE_DIR = os.path.join(self.ROOT_DIR, 'weights', self.BACKBONE + str(self.LAYERS))
+        self.MODEL_SAVE_DIR = os.path.join(self.ROOT_DIR, 'weights', self.BACKBONE + '_' + str(self.LAYERS),
+                                           self.NORM_LAYER + '_' + self.LOSS)
         # 学习率衰减系数
         self.TRAIN_POWER = 0.9
         # 检查
