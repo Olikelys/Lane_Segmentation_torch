@@ -15,11 +15,11 @@ import torch.nn.functional as F
 from models.build_backbone import build_backbone
 from models.build_aspp import build_aspp
 from models.build_decoder import build_decoder
+from models.gn import GroupNorm
+from models.frn import FilterResponseNorm2d
 import sys
 
 sys.path.append('../')
-from bn.gn import GroupNorm
-from bn.frn import FilterResponseNorm2d
 from config import cfg
 
 

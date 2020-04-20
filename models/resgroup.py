@@ -11,11 +11,8 @@
 import torch
 import torch.nn as nn
 import os
-import sys
-
-sys.path.append('../')
-from bn.gn import GroupNorm
-from bn.frn import FilterResponseNorm2d
+from models.gn import GroupNorm
+from models.frn import FilterResponseNorm2d
 
 
 def conv3x3(in_planes, out_planes, groups=1, stride=1):

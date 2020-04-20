@@ -12,11 +12,8 @@ import math
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import sys
-
-sys.path.append('../')
-from bn.gn import GroupNorm
-from bn.frn import FilterResponseNorm2d
+from models.gn import GroupNorm
+from models.frn import FilterResponseNorm2d
 
 
 def fixed_padding(inputs, kernel_size, dilation):
