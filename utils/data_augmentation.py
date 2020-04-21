@@ -136,10 +136,14 @@ if __name__ == '__main__':
     from torchvision import transforms
     from torch.utils.data import DataLoader
     from utils.image_process import LaneDataset, ToTensor
+    import sys
 
-    kwargs = {'num_workers': 4, 'pin_memory': True} if torch.cuda.is_available() else {}
+    sys.path.append('../')
+    from config import cfg
+
+    # kwargs = {'num_workers': 4, 'pin_memory': True} if torch.cuda.is_available() else {}
     train_dataset = LaneDataset(
-        csv_file='/home/kang/CV-Project/Lane_Segmentation_torch/data_list/train.csv',
+        csv_file=cfg.TRAIN_CSV_FILE,
         transform=transforms.Compose(
             [
                 ImageAug(),
@@ -149,18 +153,35 @@ if __name__ == '__main__':
             ]
         )
     )
-    training_data_batch = DataLoader(train_dataset, batch_size=4, shuffle=True, drop_last=True, **kwargs)
-    dataprocess = tqdm(training_data_batch)
-    for batch_item in dataprocess:
-        image, mask = batch_item['image'], batch_item['mask']
-        if torch.cuda.is_available():
-            image, mask = image.cuda(), mask.cuda()
+    training_data_batch = DataLoader(train_dataset, batch_size=2, shuffle=True, num_workers=4, drop_last=True)
+    # dataprocess = tqdm(training_data_batch)
+    # for batch_item in dataprocess:
+    #     image, mask = batch_item['image'], batch_item['mask']
+    #     if torch.cuda.is_available():
+    #         image, mask = image.cuda(), mask.cuda()
+    #     print(image.size())
+    #     print(mask.size())
+    #     image = image.cpu().numpy()
+    #     print(type(image))
+    #     for img in image:
+    #         plt.imshow(np.transpose(img/255, (1, 2, 0)))
+    #         plt.show()
+    #     mask = mask.cpu()
+    #     for m in mask:
+    #         plt.imshow(m)
+    #         plt.show()
+    #     break
+    device = torch.device(0)
+    for index, batch_item in enumerate(training_data_batch):
+        image, mask = batch_item['image'].to(device), batch_item['mask'].to(device)
+        # if torch.cuda.is_available():
+        #     image, mask = image.cuda(), mask.cuda()
         print(image.size())
         print(mask.size())
         image = image.cpu().numpy()
         print(type(image))
         for img in image:
-            plt.imshow(np.transpose(img/255, (1, 2, 0)))
+            plt.imshow(np.transpose(img / 255, (1, 2, 0)))
             plt.show()
         mask = mask.cpu()
         for m in mask:

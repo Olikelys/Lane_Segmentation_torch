@@ -71,7 +71,7 @@ def build_backbone(backbone='resnet-50', layers=50, output_stride=16, norm_layer
             model = iresnet.iresnet1001(norm_layer=norm_layer)
             return model
 
-    elif backbone is 'iresgroup-50':
+    elif backbone is 'iresgroup':
         if layers == 50:
             model = iresgroup.iresgroup50(norm_layer=norm_layer)
             return model

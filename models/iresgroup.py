@@ -41,7 +41,7 @@ def conv1x1(in_planes, out_planes, stride=1):
 class ResGroupBlock(nn.Module):
     reduction = 2
 
-    def __init__(self, inplanes, planes, groups, stride=1, downsample=None, norm_layer=None, start_block=False,
+    def __init__(self, inplanes, planes, groups, stride=1, downsample=None, norm_layer='bn', start_block=False,
                  end_block=False, exclude_bn0=False):
         """
         定义残插组模块
@@ -56,7 +56,7 @@ class ResGroupBlock(nn.Module):
         @param exclude_bn0:
         """
         super(ResGroupBlock, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -125,7 +125,7 @@ class ResGroupBlock(nn.Module):
 
 class iResGroup(nn.Module):
 
-    def __init__(self, block, layers, zero_init_residual=True, norm_layer=None, groups=None):
+    def __init__(self, block, layers, zero_init_residual=True, norm_layer='bn', groups=None):
         """
         构建iResGroup网络
         @param block:
@@ -134,7 +134,7 @@ class iResGroup(nn.Module):
         @param groups:
         """
         super(iResGroup, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -169,8 +169,8 @@ class iResGroup(nn.Module):
                     if m.start_block or m.end_block:
                         nn.init.constant_(m.bn3.weight, 0)
 
-    def _make_layer(self, block, planes, blocks, groups, stride=1, norm_layer=None):
-        if norm_layer is None:
+    def _make_layer(self, block, planes, blocks, groups, stride=1, norm_layer='bn'):
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -220,17 +220,17 @@ class iResGroup(nn.Module):
         return x, low_level_feat
 
 
-def iresgroup50(norm_layer=None, **kwargs):
+def iresgroup50(norm_layer='bn', **kwargs):
     model = iResGroup(ResGroupBlock, [3, 4, 6, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresgroup101(norm_layer=None, **kwargs):
+def iresgroup101(norm_layer='bn', **kwargs):
     model = iResGroup(ResGroupBlock, [3, 4, 23, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresgroup152(norm_layer=None, **kwargs):
+def iresgroup152(norm_layer='bn', **kwargs):
     model = iResGroup(ResGroupBlock, [3, 8, 36, 3], norm_layer=norm_layer, **kwargs)
     return model
 

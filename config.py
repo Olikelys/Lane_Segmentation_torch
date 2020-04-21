@@ -24,15 +24,15 @@ class Configuration(object):
         定义构建网络参数
         '''
         # 所使用的骨干网络：resnet, resgroup, iresnet, iresgroup, xception
-        self.BACKBONE = 'resnet'
+        self.BACKBONE = 'iresgroup'
         # 所使用的骨干网路的层数：50, 101, 152, 200, 302, 404, 1001
-        self.LAYERS = 50
+        self.LAYERS = 101
         # 下采样倍数
         self.OUTPUT_STRIDE = 16
         # 分类数
         self.NUM_CLASSES = 8
         # 选择BN
-        self.NORM_LAYER = 'frn'
+        self.NORM_LAYER = 'bn'
         # 重置bn为0
         self.FREEZE_BN = False
 
@@ -40,7 +40,7 @@ class Configuration(object):
         定义训练所需参数
         '''
         # 根目录
-        self.ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname("__file__")))
+        self.ROOT_DIR = '/home/kang/CV-Project/Lane_Segmentation_torch'
         # 训练集路径
         self.TRAIN_CSV_FILE = os.path.join(self.ROOT_DIR, 'data_list', 'train.csv')
         # 验证集路径
@@ -61,7 +61,7 @@ class Configuration(object):
         self.TRAIN_SHUFFLE = True
         self.VAL_TEST_SHUFFLE = False
         # 使用进程（并行处理）
-        self.DATA_WORKERS = 4
+        self.DATA_WORKERS = 2
         # 保存日志文件路径
         self.LOG_DIR = os.path.join(self.ROOT_DIR, 'logs', self.BACKBONE + '_' + str(self.LAYERS),
                                     self.NORM_LAYER + '_' + self.LOSS)

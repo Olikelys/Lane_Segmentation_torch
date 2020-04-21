@@ -36,7 +36,7 @@ class DeepLabV3p(nn.Module):
         @param freeze_bn:
         """
         super(DeepLabV3p, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm

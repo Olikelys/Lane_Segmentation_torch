@@ -29,7 +29,7 @@ class _ASPPModule(nn.Module):
         @param norm_layer:
         """
         super(_ASPPModule, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -63,7 +63,7 @@ class _ASPPModule(nn.Module):
 
 
 class ASPP(nn.Module):
-    def __init__(self, backbone='resnet-50', output_stride=16, norm_layer=None):
+    def __init__(self, backbone='resnet-50', output_stride=16, norm_layer='bn'):
         """
         构建ASPP网络
         @param backbone:
@@ -83,7 +83,7 @@ class ASPP(nn.Module):
         else:
             raise NotImplementedError
 
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm

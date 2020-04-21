@@ -26,9 +26,9 @@ def fixed_padding(inputs, kernel_size, dilation):
 
 
 class SeparableConv2d(nn.Module):
-    def __init__(self, inplanes, planes, kernel_size=3, stride=1, dilation=1, bias=False, norm_layer=None):
+    def __init__(self, inplanes, planes, kernel_size=3, stride=1, dilation=1, bias=False, norm_layer='bn'):
         super(SeparableConv2d, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -65,7 +65,7 @@ class SeparableConv2d(nn.Module):
 
 
 class Block(nn.Module):
-    def __init__(self, inplanes, planes, reps, stride=1, dilation=1, norm_layer=None, start_with_relu=True,
+    def __init__(self, inplanes, planes, reps, stride=1, dilation=1, norm_layer='bn', start_with_relu=True,
                  grow_fist=True, is_last=True):
         """
         定义深度可分离卷积块
@@ -80,7 +80,7 @@ class Block(nn.Module):
         @param is_last:
         """
         super(Block, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -177,14 +177,14 @@ class Block(nn.Module):
 
 
 class Xception(nn.Module):
-    def __init__(self, output_stride, norm_layer=None):
+    def __init__(self, output_stride, norm_layer='bn'):
         """
         构建Xception网络
         @param output_stride:
         @param norm_layer:
         """
         super(Xception, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -535,7 +535,7 @@ class Xception(nn.Module):
         return x, low_level_feat
 
 
-def xception(output_stride=16, norm_layer=None, **kwargs):
+def xception(output_stride=16, norm_layer='bn', **kwargs):
     model = Xception(output_stride=output_stride, norm_layer=norm_layer, **kwargs)
     return model
 

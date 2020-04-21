@@ -40,7 +40,7 @@ def conv1x1(in_planes, out_planes, stride=1):
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=None):
+    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer='bn'):
         """
         定义一个基本残插块 3x3 conv + 3x3 conv
         @param inplanes:
@@ -50,7 +50,7 @@ class BasicBlock(nn.Module):
         @param norm_layer:
         """
         super(BasicBlock, self).__init__()
-        if norm_layer is 'nn':
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -90,7 +90,7 @@ class BasicBlock(nn.Module):
 class Bottleneck(nn.Module):
     expansion = 4
 
-    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=None):
+    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer='bn'):
         """
         定义残插模块 1x1 + 3x3 + 1x1 conv
         @param inplanes:
@@ -100,7 +100,7 @@ class Bottleneck(nn.Module):
         @param norm_layer:
         """
         super(Bottleneck, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -141,7 +141,7 @@ class Bottleneck(nn.Module):
 
 
 class ResNet(nn.Module):
-    def __init__(self, block, layers, zero_init_residual=True, norm_layer=None):
+    def __init__(self, block, layers, zero_init_residual=True, norm_layer='bn'):
         """
         构建ResNet
         @param block:
@@ -149,7 +149,7 @@ class ResNet(nn.Module):
         @param norm_layer:
         """
         super(ResNet, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -180,7 +180,7 @@ class ResNet(nn.Module):
                 elif isinstance(m, BasicBlock):
                     nn.init.constant_(m.bn2.weight, 0)
 
-    def _make_layer(self, block, planes, blocks, stride=1, norm_layer=None):
+    def _make_layer(self, block, planes, blocks, stride=1, norm_layer='bn'):
         """
         构建网络层
         @param block: 基本模块
@@ -190,7 +190,7 @@ class ResNet(nn.Module):
         @param norm_layer:
         @return:
         """
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -227,27 +227,27 @@ class ResNet(nn.Module):
         return x, low_level_feat
 
 
-def resnet18(norm_layer=None, **kwargs):
+def resnet18(norm_layer='bn', **kwargs):
     model = ResNet(BasicBlock, [2, 2, 2, 2], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def resnet34(norm_layer=None, **kwargs):
+def resnet34(norm_layer='bn', **kwargs):
     model = ResNet(BasicBlock, [3, 4, 6, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def resnet50(norm_layer=None, **kwargs):
+def resnet50(norm_layer='bn', **kwargs):
     model = ResNet(Bottleneck, [3, 4, 6, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def resnet101(norm_layer=None, **kwargs):
+def resnet101(norm_layer='bn', **kwargs):
     model = ResNet(Bottleneck, [3, 4, 23, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def resnet152(norm_layer=None, **kwargs):
+def resnet152(norm_layer='bn', **kwargs):
     model = ResNet(Bottleneck, [3, 8, 36, 3], norm_layer=norm_layer, **kwargs)
     return model
 

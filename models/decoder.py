@@ -16,7 +16,7 @@ from models.gn import GroupNorm
 from models.frn import FilterResponseNorm2d
 
 class Decoder(nn.Module):
-    def __init__(self, num_classes=8, backbone='resnet', norm_layer=None):
+    def __init__(self, num_classes=8, backbone='resnet', norm_layer='bn'):
         super(Decoder, self).__init__()
         if backbone is 'resnet' or backbone is 'iresnet':
             low_level_inplanes = 256
@@ -25,7 +25,7 @@ class Decoder(nn.Module):
         else:
             raise NotImplementedError
 
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm

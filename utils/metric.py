@@ -21,11 +21,6 @@ class Evaluator(object):
         Acc = np.diag(self.confusion_matrix).sum() / self.confusion_matrix.sum()
         return Acc
 
-    # 计算每个类的正确预测的比例，求所有类的平均
-    def Pixel_Accuracy_Class(self):
-        Acc = np.diag(self.confusion_matrix) / self.confusion_matrix.sum(axis=1)
-        return Acc
-
     def Mean_Intersection_over_Union(self):
         MIoU = np.diag(self.confusion_matrix) / (
                 np.sum(self.confusion_matrix, axis=1) + np.sum(self.confusion_matrix, axis=0) -

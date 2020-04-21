@@ -41,7 +41,7 @@ def conv1x1(in_planes, out_planes, stride=1):
 class ResGroupBlock(nn.Module):
     reduction = 2
 
-    def __init__(self, inplanes, planes, groups, stride=1, downsample=None, norm_layer=None):
+    def __init__(self, inplanes, planes, groups, stride=1, downsample=None, norm_layer='bn'):
         """
         定义残插组卷积模块
         @param inplanes:
@@ -52,7 +52,7 @@ class ResGroupBlock(nn.Module):
         @param norm_layer:
         """
         super(ResGroupBlock, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -93,7 +93,7 @@ class ResGroupBlock(nn.Module):
 
 class ResGroup(nn.Module):
 
-    def __init__(self, block, layers, zero_init_residual=True, norm_layer=None, groups=None):
+    def __init__(self, block, layers, zero_init_residual=True, norm_layer='bn', groups=None):
         """
         构建ResGroup网络
         @param block:
@@ -103,7 +103,7 @@ class ResGroup(nn.Module):
         @param groups:
         """
         super(ResGroup, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -171,17 +171,17 @@ class ResGroup(nn.Module):
         return x, low_level_feat
 
 
-def resgroup50(norm_layer=None, **kwargs):
+def resgroup50(norm_layer='bn', **kwargs):
     model = ResGroup(ResGroupBlock, [3, 4, 6, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def resgroup101(norm_layer=None, **kwargs):
+def resgroup101(norm_layer='bn', **kwargs):
     model = ResGroup(ResGroupBlock, [3, 4, 23, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def resgroup152(norm_layer=None, **kwargs):
+def resgroup152(norm_layer='bn', **kwargs):
     model = ResGroup(ResGroupBlock, [3, 8, 36, 3], norm_layer=norm_layer, **kwargs)
     return model
 

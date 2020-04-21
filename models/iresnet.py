@@ -41,7 +41,7 @@ def conv1x1(in_planes, out_planes, stride=1):
 class BasicBlock(nn.Module):
     expansion = 1
 
-    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer='rfn', start_block=False,
+    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer='bn', start_block=False,
                  end_block=False, exclude_bn0=False):
         """
         定义基本残插块
@@ -59,7 +59,7 @@ class BasicBlock(nn.Module):
         @param exclude_bn0:
         """
         super(BasicBlock, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -121,7 +121,7 @@ class BasicBlock(nn.Module):
 class Bottleneck(nn.Module):
     expansion = 4
 
-    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer=None, start_block=False,
+    def __init__(self, inplanes, planes, stride=1, downsample=None, norm_layer='bn', start_block=False,
                  end_block=False, exclude_bn0=False):
         """
         优化了resnet的残插模块， 分别为:
@@ -138,7 +138,7 @@ class Bottleneck(nn.Module):
         @param exclude_bn0:
         """
         super(Bottleneck, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -206,7 +206,7 @@ class Bottleneck(nn.Module):
 
 
 class iResNet(nn.Module):
-    def __init__(self, block, layers, zero_init_residual=True, norm_layer=None):
+    def __init__(self, block, layers, zero_init_residual=True, norm_layer='bn'):
         """
         构建iResNet网络
         @param block:
@@ -215,7 +215,7 @@ class iResNet(nn.Module):
         @param norm_layer:
         """
         super(iResNet, self).__init__()
-        if norm_layer is None:
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -247,8 +247,8 @@ class iResNet(nn.Module):
                     if m.start_block or m.end_block:
                         nn.init.constant_(m.bn2.weight, 0)
 
-    def _make_layer(self, block, planes, blocks, stride=1, norm_layer=None):
-        if norm_layer is None:
+    def _make_layer(self, block, planes, blocks, stride=1, norm_layer='bn'):
+        if norm_layer is 'bn':
             norm_layer = nn.BatchNorm2d
         elif norm_layer is 'gn':
             norm_layer = GroupNorm
@@ -297,32 +297,32 @@ class iResNet(nn.Module):
         return x, low_level_feat
 
 
-def iresnet18(norm_layer=None, **kwargs):
+def iresnet18(norm_layer='bn', **kwargs):
     model = iResNet(BasicBlock, [2, 2, 2, 2], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresnet34(norm_layer=None, **kwargs):
+def iresnet34(norm_layer='bn', **kwargs):
     model = iResNet(BasicBlock, [3, 4, 6, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresnet50(norm_layer=None, **kwargs):
+def iresnet50(norm_layer='bn', **kwargs):
     model = iResNet(Bottleneck, [3, 4, 6, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresnet101(norm_layer=None, **kwargs):
+def iresnet101(norm_layer='bn', **kwargs):
     model = iResNet(Bottleneck, [3, 4, 23, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresnet152(norm_layer=None, **kwargs):
+def iresnet152(norm_layer='bn', **kwargs):
     model = iResNet(Bottleneck, [3, 8, 36, 3], norm_layer=norm_layer, **kwargs)
     return model
 
 
-def iresnet200(norm_layer=None, **kwargs):
+def iresnet200(norm_layer='bn', **kwargs):
     model = iResNet(Bottleneck, [3, 24, 36, 3], norm_layer=norm_layer, **kwargs)
     return model
 
